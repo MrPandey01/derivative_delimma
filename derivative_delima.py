@@ -1,3 +1,7 @@
+"""
+Command to execute this file:
+``` manim -pqh derivative_delima.py main ```
+"""
 from manim import *
 
 class main(Scene):
