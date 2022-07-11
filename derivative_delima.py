@@ -1,6 +1,6 @@
 from manim import *
 
-class scene1(Scene):
+class main(Scene):
     def construct(self):
 
         """Scene 1"""
