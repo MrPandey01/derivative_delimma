@@ -15,7 +15,7 @@ class main(Scene):
 
         play_kw = {"run_time": 1.5}
 
-        pg_title = Text("Prelude", font_size=25, color=TEAL)
+        pg_title = Text("Introduction", font_size=25, color=TEAL)
         pg_title.shift(3*UP)
         pg_title.shift(5*LEFT)
 
@@ -331,43 +331,63 @@ class main(Scene):
         )
 
         """ Scene ---------------------------------------------------------------------------  """
+        pg_title = Text("Two explanations", font_size=25, color=TEAL)
+        pg_title.shift(3*UP)
+        pg_title.shift(5*LEFT)
+
         eq1 = MathTex(r"x^2 =x+x+\cdots+x + (x-\lfloor x \rfloor) \cdot x", substrings_to_isolate=["x"])
         eq1.set_color_by_tex_to_color_map({"x": ORANGE})
-        eq1.move_to(3*UP)
+        eq1.move_to(2*UP)
+        l1_txt = Text("(1)", font_size=15)
+        l1_txt.next_to(eq1, 5*RIGHT)
 
         Bi = Brace(eq1[2:7], DOWN)
         ti = Bi.get_tex(r"\lfloor", r"x", r"\rfloor \mathrm{~times}")
         ti[1].set_color(ORANGE)
+        grp = VGroup(eq1, Bi,ti, l1_txt)
 
-        grp = VGroup(eq1, Bi,ti)
-
-        eq2 = MathTex(r"\frac{d}{dx}(xf(x)) =1\cdot f(x) + x \cdot {d \over dx} f(x)", substrings_to_isolate=["x"])
+        eq2 = MathTex(r"{d \over dx}(xf(x)) =x \cdot {d \over dx} f(x) +", r"1", r"\cdot f(x)", substrings_to_isolate=["x"])
         eq2.set_color_by_tex_to_color_map({"x": ORANGE})
         eq2.next_to(grp, 2*DOWN)
+        l2_txt = Text("(2)", font_size=15)
+        l2_txt.next_to(eq2, 3*RIGHT)
+        grp2 = VGroup(eq2, l2_txt)
 
-        eq3 = MathTex(r"{d \over dx}(x \cdot x) ={dx \over dx} \cdot x + x \cdot {dx \over dx}", substrings_to_isolate=["x"])
+        frameBoxa = SurroundingRectangle(eq2[13:17], buff=0.8 * SMALL_BUFF)
+        frameBoxa.set_stroke(BLUE, 3)
+        boxtextea1 = Text("Didn't account for this part", font_size=15)
+        boxtextea2 = Text("in the previous analysis", font_size=15)
+        boxtextea1.next_to(eq2[13:17].get_center(), UP, buff=0.7)
+        boxtextea2.next_to(boxtextea1.get_center(), 0.5*DOWN)
+        grp_txt = VGroup(boxtextea1, boxtextea2)
+        grp_txt.set_color(BLUE, 3)
+
+        eq3 = MathTex(r"{d \over dx}(x \cdot x) & ={dx \over dx} \cdot x + x \cdot {dx \over dx} \\  &=2x", substrings_to_isolate=["x"])
         eq3.set_color_by_tex_to_color_map({"x": ORANGE})
-        eq3.next_to(eq2, DOWN)
+        eq3.next_to(eq2, 2*DOWN)
 
-        eq4 = MathTex(r"\frac{d}{dx}(x \cdot x) =2x", substrings_to_isolate=["x"])
-        eq4.set_color_by_tex_to_color_map({"x": ORANGE})
-        eq4.next_to(eq3, DOWN)
-
+        self.play(FadeIn(pg_title))
         self.play(FadeIn(grp))
         self.wait(2)
-        self.play(FadeIn(eq2))
+        self.play(FadeIn(grp2))
+        self.wait(1)
+
+        self.play(Create(frameBoxa))
+        self.play(Write(grp_txt))
+
         self.wait(2)
         self.play(FadeIn(eq3))
-        self.wait(2)
-        self.play(FadeIn(eq4))
 
         self.wait(2)
 
-        self.play(FadeOut(grp),
-                  FadeOut(eq2),
-                  FadeOut(eq3),
-                  FadeOut(eq4)
-                  )
+        self.play(
+            FadeOut(pg_title),
+            FadeOut(grp),
+            FadeOut(grp2),
+            FadeOut(frameBoxa),
+            FadeOut(grp_txt),
+            FadeOut(eq3),
+            )
 
         """ Scene Last ----------------------------------------------------------------------- """
         last_text = Tex("Thanks!")
