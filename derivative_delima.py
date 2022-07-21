@@ -5,6 +5,7 @@ Command to execute this file:
 Note: The scene # below does not correspond to the scene # in script.
 Use your discretion.
 """
+from typing_extensions import runtime
 from manim import *
 from numpy.core.multiarray import arange
 
@@ -14,6 +15,8 @@ class main(Scene):
         """ Global settings ----------------------------------------------------------------  """
 
         play_kw = {"run_time": 1.5}
+        play_kw1 = {"run_time": 2}
+        play_kw2 = {"run_time": 3}
 
         pg_title = Text("Introduction", font_size=25, color=TEAL)
         pg_title.shift(3*UP)
@@ -22,26 +25,59 @@ class main(Scene):
 
         """Scene --------------------------------------------------------------------------- """
         title = Text("The Derivative Dilemma", gradient=(RED, BLUE, GREEN), font_size=50)
-        title.shift(UP)
+        title.shift(2*UP)
 
         subtitle = MathTex(r"{d \over dx} f(x) =\lim_{h \to 0} {f(x+h) - f(x) \over h}",font_size=30, substrings_to_isolate=["x"])
         subtitle.set_color_by_tex_to_color_map({"x": ORANGE})
         subtitle.next_to(title, 1.5 * DOWN)
 
-        credits = Tex("- Mainak Mandal, Arun Pandey", color=TEAL, font_size=20)
-        credits.next_to(subtitle, 7 * DOWN)
-
         framebox1 = SurroundingRectangle(subtitle, buff=.1)
         framebox1.set_stroke(width=1)
 
+
+        ax = Axes(
+            x_range=[0, 4, 0.5],
+            y_range=[0, 16, 1],
+            axis_config={"include_tip": False,
+                         "include_numbers": True}
+        )
+        labels = ax.get_axis_labels(x_label="x",
+                                    y_label="f(x)")
+        curve_1 = ax.plot(lambda x: x ** 2, x_range=[0, 4], color=BLUE_C)
+        grp1 = Group(ax, labels, curve_1)
+        grp1.scale(0.35)
+        grp1.next_to(subtitle, DOWN)
+
+        credits = Tex("- Mainak Mandal, Arun Pandey", color=TEAL, font_size=20)
+        credits.next_to(grp1, 3 * DOWN)
+
+
+        self.wait(1)
         self.play(
             Write(title),
-            FadeIn(subtitle, shift=UP),
-            Create(framebox1),
-            FadeIn(credits)
+            **play_kw1,
         )
+        self.wait(5)
+        self.play(
+            Write(subtitle),
+            Create(framebox1),
+            **play_kw1,
+        )
+        self.wait(4)
+        self.play(
+            Create(ax),
+            Create(labels),
+            Create(curve_1),
+            **play_kw2
+            )
+        self.wait(6)
+        self.play(
+            FadeIn(credits)
+            )
         self.wait(3)
+
         self.play(FadeOut(framebox1, shift=DOWN),
+                  FadeOut(grp1, shift=DOWN),
                   FadeOut(subtitle, shift=DOWN),
                   FadeOut(credits, shift=DOWN))
 
@@ -54,7 +90,7 @@ class main(Scene):
                                              "x": ORANGE})
         self.play(Transform(title, eqns1), FadeIn(pg_title))
         self.play(ApplyMethod(title.shift, UP))
-        self.wait(2)
+        self.wait(4)
 
         eqns2 = MathTex(r"a", r"^2", r"=", r"a", r"b", substrings_to_isolate=["a", "b"])
         eqns2.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -67,7 +103,7 @@ class main(Scene):
             ReplacementTransform(title[19].copy(), eqns2[3:]),
             **play_kw
         )
-        self.wait(2)
+        self.wait(6)
 
         eqns3 = MathTex(r"a",
                         r"^2",
@@ -89,7 +125,7 @@ class main(Scene):
             TransformMatchingTex(eqns2.copy(), eqns3),
             **play_kw
         )
-        self.wait(2)
+        self.wait(7)
 
         eqns4 = MathTex(r"(a+b)(a-b) =b(a-b)", substrings_to_isolate=["a", "b"])
         eqns4.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -100,7 +136,7 @@ class main(Scene):
             TransformMatchingTex(eqns3.copy(), eqns4),
             **play_kw
         )
-        self.wait(2)
+        self.wait(6)
 
         eqns5 = MathTex(r"2b", r"(a-b)", r"=", r"b", r"(a-b)", substrings_to_isolate=["a", "b"])
         eqns5.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -114,7 +150,7 @@ class main(Scene):
             ReplacementTransform(eqns4[12:].copy(), eqns5[9:]),
             **play_kw
         )
-        self.wait(2)
+        self.wait(12)
 
         eqns6 = MathTex(r"2b", r"=", r"b", substrings_to_isolate=["a", "b"])
         eqns6.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -127,7 +163,7 @@ class main(Scene):
             ReplacementTransform(eqns5[8].copy(), eqns6[3]),
             **play_kw
         )
-        self.wait(2)
+        self.wait(6)
 
         eqns7 = MathTex(r"2", r"=", r"1")
         eqns7.next_to(eqns6, DOWN)
@@ -142,7 +178,7 @@ class main(Scene):
         warn_txt.set_color(RED)
         warn_txt.next_to(eqns7, RIGHT)
         self.play(Write(warn_txt))
-        self.wait(2)
+        self.wait(22)
 
         self.play(
             FadeOut(title),
@@ -170,7 +206,7 @@ class main(Scene):
         self.play(Write(eqns1_s2[4:]))
         self.play(FadeIn(Bi1,ti1))
         self.play(ApplyMethod(grp1.shift, UP))
-        self.wait(2)
+        self.wait(6)
 
         eqns2_s2 = MathTex(r"2^2 = 2+2", substrings_to_isolate=["a", "b"])
         eqns2_s2.next_to(eqns1_s2, 3 * DOWN)
@@ -178,7 +214,7 @@ class main(Scene):
                                                 "b": RED,
                                                 "x": ORANGE})
         self.play(FadeIn(eqns2_s2))
-        self.wait(2)
+        self.wait(3)
 
         eqns2_s3 = MathTex(r"3^2 =3+3+3", substrings_to_isolate=["a", "b"])
         eqns2_s3.next_to(eqns2_s2, DOWN)
@@ -186,7 +222,7 @@ class main(Scene):
                                                 "b": RED,
                                                 "x": ORANGE})
         self.play(FadeIn(eqns2_s3))
-        self.wait(2)
+        self.wait(3)
 
         eqns2_s4 = MathTex(r" x^2 = x +x + x +\cdots + x", substrings_to_isolate=["x"])
         eqns2_s4.next_to(eqns2_s3, DOWN)
@@ -200,7 +236,7 @@ class main(Scene):
 
         self.play(FadeIn(eqns2_s4))
         self.play(FadeIn(grp))
-        self.wait(2)
+        self.wait(6)
 
         self.play(FadeOut(eqns1_s2),
                   FadeOut(eqns2_s2),
