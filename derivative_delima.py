@@ -8,6 +8,7 @@ Use your discretion.
 from typing_extensions import runtime
 from manim import *
 from numpy.core.multiarray import arange
+import math
 
 
 class main(Scene):
@@ -25,7 +26,7 @@ class main(Scene):
 
         """Scene --------------------------------------------------------------------------- """
         title = Text("The Derivative Dilemma", gradient=(RED, BLUE, GREEN), font_size=50)
-        title.shift(2*UP)
+        title.shift(3*UP)
 
         subtitle = MathTex(r"{d \over dx} f(x) =\lim_{h \to 0} {f(x+h) - f(x) \over h}",font_size=30, substrings_to_isolate=["x"])
         subtitle.set_color_by_tex_to_color_map({"x": ORANGE})
@@ -35,21 +36,47 @@ class main(Scene):
         framebox1.set_stroke(width=1)
 
 
+        #  ax = Axes(
+        #      x_range=[0, 4, 0.5],
+        #      y_range=[0, 16, 1],
+        #      axis_config={"include_tip": False,
+        #                   "include_numbers": True}
+        #  )
+        #  labels = ax.get_axis_labels(x_label="x",
+        #                              y_label="f(x)")
+        #  curve_1 = ax.plot(lambda x: x ** 2, x_range=[0, 4], color=BLUE_C)
+        #  grp1 = Group(ax, labels, curve_1)
+        #  grp1.scale(0.35)
+        #  grp1.next_to(subtitle, DOWN)
+        def PDF_normal(x, mu, sigma):
+            ''' General form of probability density function of univariate normal distribution '''
+            return math.exp(-((x-mu)**2)/(2*sigma**2))/(sigma*math.sqrt(2*math.pi))
+
         ax = Axes(
-            x_range=[0, 4, 0.5],
-            y_range=[0, 16, 1],
-            axis_config={"include_tip": False,
-                         "include_numbers": True}
-        )
+            x_range = [-5, 5, 1],
+            y_range = [0, 0.5, 0.1],
+            axis_config = {'include_numbers':True}
+            )
         labels = ax.get_axis_labels(x_label="x",
                                     y_label="f(x)")
-        curve_1 = ax.plot(lambda x: x ** 2, x_range=[0, 4], color=BLUE_C)
-        grp1 = Group(ax, labels, curve_1)
-        grp1.scale(0.35)
+
+        curve = always_redraw(lambda: ax.plot(lambda x: PDF_normal(x, 0, 1)))
+
+        alpha = ValueTracker(0.4)  # this is the value we're changing when animating
+
+        # function for drawing the tangent line
+        draw_tangent = (lambda: TangentLine(curve, alpha.get_value(), 2, color=YELLOW))
+
+        # always redraw the tangent line, i.e. update when alpha changes
+        tangent = always_redraw(draw_tangent)
+
+        grp1 = Group(ax, labels, curve, tangent)
+        grp1.scale(0.40)
         grp1.next_to(subtitle, DOWN)
 
+
         credits = Tex("- Mainak Mandal, Arun Pandey", color=TEAL, font_size=20)
-        credits.next_to(grp1, 3 * DOWN)
+        credits.next_to(curve, 4 * DOWN)
 
 
         self.wait(1)
@@ -64,12 +91,20 @@ class main(Scene):
             **play_kw1,
         )
         self.wait(4)
+        #  self.add(ax)
+        #  self.play(Create(curve))
         self.play(
             Create(ax),
             Create(labels),
-            Create(curve_1),
+            Create(curve),
             **play_kw2
             )
+        self.wait(1)
+        self.play(Create(tangent))
+        #  # move the value of alpha around
+        for alpha_ in (0.3, 0.2, 0.5, 0.8):
+            self.play(alpha.animate.set_value(alpha_))
+
         self.wait(6)
         self.play(
             FadeIn(credits)
@@ -81,6 +116,13 @@ class main(Scene):
                   FadeOut(subtitle, shift=DOWN),
                   FadeOut(credits, shift=DOWN))
 
+        """ Scene ---------------------------------------------------------------------------  """
+        eqns0 = MathTex(r"1", r"\times", r"0", r"=", r"2", r"\times", r"0")
+        eqns0.shift(UP)
+        self.play(Transform(title, eqns0), FadeIn(pg_title))
+        #  self.play(ApplyMethod(title.shift, UP))
+        self.wait(4)
+        #  self.play(FadeOut(eqns0))
 
         """ Scene ---------------------------------------------------------------------------  """
         eqns1 = MathTex(r"a", r"=", r"b", substrings_to_isolate=["a", "b"])
@@ -88,7 +130,7 @@ class main(Scene):
         eqns1.set_color_by_tex_to_color_map({"a": YELLOW,
                                              "b": RED,
                                              "x": ORANGE})
-        self.play(Transform(title, eqns1), FadeIn(pg_title))
+        self.play(Transform(title, eqns1))
         self.play(ApplyMethod(title.shift, UP))
         self.wait(4)
 
