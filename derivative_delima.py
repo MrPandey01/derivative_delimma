@@ -5,9 +5,8 @@ Command to execute this file:
 Note: The scene # below does not correspond to the scene # in script.
 Use your discretion.
 """
-from typing_extensions import runtime
 from manim import *
-from numpy.core.multiarray import arange
+from numpy.core.multiarray import arange, array
 import math
 
 
@@ -56,7 +55,7 @@ class main(Scene):
             x_range = [-5, 5, 1],
             y_range = [0, 0.5, 0.1],
             axis_config = {'include_numbers':True}
-            )
+        )
         labels = ax.get_axis_labels(x_label="x",
                                     y_label="f(x)")
 
@@ -98,7 +97,7 @@ class main(Scene):
             Create(labels),
             Create(curve),
             **play_kw2
-            )
+        )
         self.wait(1)
         self.play(Create(tangent))
         #  # move the value of alpha around
@@ -108,7 +107,7 @@ class main(Scene):
         self.wait(6)
         self.play(
             FadeIn(credits)
-            )
+        )
         self.wait(3)
 
         self.play(FadeOut(framebox1, shift=DOWN),
@@ -353,6 +352,7 @@ class main(Scene):
         equation.move_to(2.5*UP)
         equation.set_color_by_tex_to_color_map({"x": ORANGE})
 
+        # Continous graph
         ax = Axes(
             x_range=[0, 4, 0.5],
             y_range=[0, 16, 1],
@@ -366,6 +366,7 @@ class main(Scene):
         grp1.scale(0.45)
         grp1.move_to(3.5*LEFT)
 
+        # Discrete graph
         ax2 = Axes(
             x_range=[0, 4, 0.5],
             y_range=[0, 16, 1],
@@ -393,10 +394,10 @@ class main(Scene):
                   Create(curve_1),
                   )
         self.play(
-                  Create(ax2),
-                  Create(labels2),
-                  Create(curve_2["vertex_dots"]),
-                  )
+            Create(ax2),
+            Create(labels2),
+            Create(curve_2["vertex_dots"]),
+        )
         self.play(Write(equation2))
 
         self.wait(2)
@@ -407,6 +408,146 @@ class main(Scene):
             FadeOut(grp2),
             FadeOut(equation2),
         )
+
+        """ Animate the tangent as derivative"""
+        # Continous graph
+        ax = Axes(
+            x_range=[0, 4, 0.5],
+            y_range=[0, 16, 1],
+            axis_config={"include_tip": False,
+                         "include_numbers": True}
+        )
+        labels = ax.get_axis_labels(x_label="x",
+                                    y_label="f(x)")
+
+        func = ax.plot(lambda x: x ** 2, x_range=[0, 4], color=BLUE_C)
+
+        plt_grp = Group(ax, labels, func)
+        plt_grp.scale(0.8)
+
+        x = ValueTracker(2.0)
+        dx = ValueTracker(1)
+
+        secant = always_redraw(
+            lambda: ax.get_secant_slope_group(
+                x=x.get_value(),
+                graph=func,
+                dx=dx.get_value(),
+                dx_line_color=YELLOW,
+                dy_line_color=ORANGE,
+                #  dx_label="dx",
+                dy_label="dy",
+                secant_line_color=GREEN,
+                secant_line_length=6,
+            )
+        )
+
+        dot1 = always_redraw(
+            lambda: Dot()
+            .scale(0.7)
+            .move_to(ax.c2p(x.get_value(), func.underlying_function(x.get_value())))
+        )
+        dot2 = always_redraw(
+            lambda: Dot()
+            .scale(0.7)
+            .move_to(
+                ax.c2p(
+                    (x).get_value() + dx.get_value(),
+                    func.underlying_function(x.get_value() + dx.get_value()),
+                )
+            )
+        )
+        secat_grp = VGroup(dot1, dot2, secant)
+
+        dx_var = Variable(dx.get_value(), 'dx', num_decimal_places=3)
+        dx_var.scale(0.7)
+        dx_var.next_to(dot1, RIGHT)
+        dx_var.shift(0.5*DOWN)
+        dx_var.set_color(YELLOW)
+        dx_var.add_updater(lambda v: v.tracker.set_value(dx.get_value()))
+
+        v_line1 = always_redraw(lambda: ax.get_vertical_line(dot1.get_center()))
+        v_line2 = always_redraw(lambda: ax.get_vertical_line(dot2.get_center()))
+
+        self.play(Create(ax),
+                  Create(labels),
+                  Create(func),
+                  )
+        self.wait(2)
+        self.play(
+            Create(secat_grp),
+            run_time=2
+        )
+        self.play(
+            Create(v_line1),
+            Create(v_line2),
+        )
+        self.add(dx_var)
+        self.play(dx.animate.set_value(0.001),
+                  dx_var.tracker.animate.set_value(0.001),
+                  run_time=10)
+        self.wait(2)
+        self.play(
+            FadeOut(secat_grp),
+            FadeOut(dx_var),
+            FadeOut(v_line1),
+            FadeOut(v_line2),
+        )
+
+
+        """ Tranmsform into Discrete graph """
+        x_pts = [x for x in arange(0, 4.5, 0.5)]
+        y_pts = [x*x for x in arange(0, 4.5, 0.5)]
+        curve_2 = ax.plot_line_graph(x_values=x_pts, y_values=y_pts, line_color=BLUE_C)
+
+        x = ValueTracker(2.0)
+        dx = ValueTracker(1)
+
+        dot1 = Dot(ax.c2p(2, 4))
+        dot2 = Dot(ax.c2p(3, 9))
+        line = Line(start=dot1.get_center(), end=dot2.get_center()).set_color(GREEN)
+
+        dot3 = Dot(ax.c2p(3, 4))
+        h_line_discrete = Line(start=dot1.get_center(), end=dot3.get_center()).set_color(YELLOW)
+        v_line_discrete = Line(start=dot2.get_center(), end=dot3.get_center()).set_color(ORANGE)
+
+        Y_label = MathTex("dy").set_color(ORANGE)
+        Y_label.scale(0.8)
+        Y_label.next_to(v_line_discrete, 0.5*RIGHT)
+        extra_lines_grp = VGroup(h_line_discrete, v_line_discrete, Y_label)
+
+        v_line1 = always_redraw(lambda: ax.get_vertical_line(ax.c2p(2, 4)))
+        v_line2 = always_redraw(lambda: ax.get_vertical_line(ax.c2p(3, 9)))
+
+        dx_var = Variable(1, 'dx', num_decimal_places=3)
+        dx_var.scale(0.7)
+        dx_var.next_to(dot1, RIGHT)
+        dx_var.shift(0.5*DOWN)
+        dx_var.set_color(YELLOW)
+
+
+        self.play(Transform(func, curve_2["vertex_dots"]))
+        self.play(
+            Create(line),
+            run_time=2
+        )
+        self.play(
+            Create(v_line1),
+            Create(v_line2),
+            Create(extra_lines_grp),
+        )
+        self.add(dx_var)
+        self.wait(4)
+
+        self.play(
+            FadeOut(plt_grp),
+            FadeOut(dx_var),
+            FadeOut(line),
+            FadeOut(v_line1),
+            FadeOut(v_line2),
+            FadeOut(extra_lines_grp),
+        )
+
 
         """ Scene ---------------------------------------------------------------------------  """
         pg_title = Text("Two explanations", font_size=25, color=TEAL)
@@ -465,7 +606,7 @@ class main(Scene):
             FadeOut(frameBoxa),
             FadeOut(grp_txt),
             FadeOut(eq3),
-            )
+        )
 
         """ Scene Last ----------------------------------------------------------------------- """
         last_text = Tex("Thanks!")
