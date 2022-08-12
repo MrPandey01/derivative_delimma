@@ -519,7 +519,7 @@ class main(Scene):
         )
 
 
-        """ Tranmsform into Discrete graph """
+        """ Transform into Discrete graph """
         x_pts = [x for x in arange(0, 4.5, 0.5)]
         y_pts = [x*x for x in arange(0, 4.5, 0.5)]
         curve_2 = ax.plot_line_graph(x_values=x_pts, y_values=y_pts, line_color=BLUE_C)
