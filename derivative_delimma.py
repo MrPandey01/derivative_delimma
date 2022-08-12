@@ -573,7 +573,7 @@ class main(Scene):
         )
 
 
-        """ Scene ---------------------------------------------------------------------------  """
+        """ Scene """
         pg_title = Text("Two explanations", font_size=25, color=TEAL)
         pg_title.shift(3*UP)
         pg_title.shift(5*LEFT)
