@@ -15,6 +15,7 @@ Feel free to ask further questions and use the code as you may find useful.
 Further suggestions or collaborations on the mathematical animation videos are very welcome.
 
 ## Authors
-Arun Pandey
-Mainak Mandal
+- Arun Pandey
+
+- Mainak Mandal
 
