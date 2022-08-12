@@ -1,6 +1,6 @@
 """
 Command to execute this file:
-``` manim -pqh derivative_delima.py main ```
+``` manim -pqh derivative_delimma.py main ```
 """
 from manim import *
 from numpy.core.multiarray import arange
