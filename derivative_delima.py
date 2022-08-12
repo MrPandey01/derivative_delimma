@@ -116,13 +116,13 @@ class main(Scene):
                   FadeOut(credits, shift=DOWN))
         return title, pg_title
 
-    def scene_2(self, title, pg_title):
+    def scene_2(self, title: Mobject, pg_title: Mobject):
         eqns0 = MathTex(r"1", r"\times", r"0", r"=", r"2", r"\times", r"0")
         eqns0.shift(UP)
         self.play(Transform(title, eqns0), FadeIn(pg_title))
         self.wait(4)
 
-    def scene_3(self, title):
+    def scene_3(self, title: Mobject):
         eqns1 = MathTex(r"a", r"=", r"b", substrings_to_isolate=["a", "b"])
         eqns1.shift(UP)
         eqns1.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -231,7 +231,7 @@ class main(Scene):
             FadeOut(warn_txt)
         )
 
-    def scene_4(self, pg_title):
+    def scene_4(self, pg_title: Mobject):
         eqns1_s2 = MathTex(r"a \times b =", r"a + a + a + \cdots + a", substrings_to_isolate=["a", "b"])
         eqns1_s2.shift(UP)
         eqns1_s2.set_color_by_tex_to_color_map({"a": YELLOW,
