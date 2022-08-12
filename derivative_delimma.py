@@ -52,7 +52,6 @@ class main(Scene):
         pg_title.shift(3*UP)
         pg_title.shift(5*LEFT)
 
-        """Scene --------------------------------------------------------------------------- """
         ax = Axes(
             x_range = [-4, 5, 1],
             y_range = [0, 0.5, 0.1],
