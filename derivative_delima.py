@@ -1,9 +1,6 @@
 """
 Command to execute this file:
 ``` manim -pqh derivative_delima.py main ```
-
-Note: The scene # below does not correspond to the scene # in script.
-Use your discretion.
 """
 from manim import *
 from numpy.core.multiarray import arange
