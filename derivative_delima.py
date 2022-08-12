@@ -14,20 +14,32 @@ def PDF_normal(x, mu, sigma):
     return math.exp(-((x-mu)**2)/(2*sigma**2))/(sigma*math.sqrt(2*math.pi))
 
 class main(Scene):
+
     def construct(self):
-        """ Global settings ----------------------------------------------------------------  """
+        title, pg_title = self.intro_scene()
 
-        play_kw = {"run_time": 1.5}
-        play_kw1 = {"run_time": 2}
-        play_kw2 = {"run_time": 3}
-
-        pg_title = Text("Introduction", font_size=25, color=TEAL)
-        pg_title.shift(3*UP)
-        pg_title.shift(5*LEFT)
-
-
-        """Scene --------------------------------------------------------------------------- """
         self.next_section()
+        self.scene_2(title=title, pg_title=pg_title)
+
+        self.next_section()
+        self.scene_3(title=title)
+
+        self.next_section()
+        self.scene_4(pg_title=pg_title)
+
+        self.next_section()
+        self.scene_5()
+
+        self.next_section()
+        self.scene_6()
+
+        self.next_section()
+        self.scene_7()
+
+        self.next_section()
+        self.scene_thanks()
+
+    def intro_scene(self):
         title = Text("The Derivative Dilemma", gradient=(RED, BLUE, GREEN), font_size=50)
         title.shift(3*UP)
 
@@ -39,8 +51,13 @@ class main(Scene):
         framebox1.set_stroke(width=1)
 
 
+        pg_title = Text("Introduction", font_size=25, color=TEAL)
+        pg_title.shift(3*UP)
+        pg_title.shift(5*LEFT)
+
+        """Scene --------------------------------------------------------------------------- """
         ax = Axes(
-            x_range = [-5, 5, 1],
+            x_range = [-4, 5, 1],
             y_range = [0, 0.5, 0.1],
             axis_config = {'include_numbers':True}
         )
@@ -69,20 +86,20 @@ class main(Scene):
         self.wait(1)
         self.play(
             Write(title),
-            **play_kw1,
+            run_time=2,
         )
         self.wait(5)
         self.play(
             Write(subtitle),
             Create(framebox1),
-            **play_kw1,
+            run_time=2,
         )
         self.wait(4)
         self.play(
             Create(ax),
             Create(labels),
             Create(curve),
-            **play_kw2
+            run_time=3
         )
         self.wait(1)
         self.play(Create(tangent))
@@ -100,16 +117,15 @@ class main(Scene):
                   FadeOut(grp1, shift=DOWN),
                   FadeOut(subtitle, shift=DOWN),
                   FadeOut(credits, shift=DOWN))
+        return title, pg_title
 
-        """ Scene ---------------------------------------------------------------------------  """
-        self.next_section()
+    def scene_2(self, title, pg_title):
         eqns0 = MathTex(r"1", r"\times", r"0", r"=", r"2", r"\times", r"0")
         eqns0.shift(UP)
         self.play(Transform(title, eqns0), FadeIn(pg_title))
         self.wait(4)
 
-        """ Scene ---------------------------------------------------------------------------  """
-        self.next_section()
+    def scene_3(self, title):
         eqns1 = MathTex(r"a", r"=", r"b", substrings_to_isolate=["a", "b"])
         eqns1.shift(UP)
         eqns1.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -128,7 +144,7 @@ class main(Scene):
             ReplacementTransform(title[6].copy(), eqns2[:2]),
             ReplacementTransform(title[13].copy(), eqns2[2]),
             ReplacementTransform(title[19].copy(), eqns2[3:]),
-            **play_kw
+            run_time=1.5
         )
         self.wait(6)
 
@@ -150,7 +166,7 @@ class main(Scene):
         eqns3.next_to(eqns2, DOWN)
         self.play(
             TransformMatchingTex(eqns2.copy(), eqns3),
-            **play_kw
+            run_time=1.5
         )
         self.wait(7)
 
@@ -161,7 +177,7 @@ class main(Scene):
         eqns4.next_to(eqns3, DOWN)
         self.play(
             TransformMatchingTex(eqns3.copy(), eqns4),
-            **play_kw
+            run_time=1.5
         )
         self.wait(6)
 
@@ -175,7 +191,7 @@ class main(Scene):
             ReplacementTransform(eqns4[5:10].copy(), eqns5[3:8]),
             ReplacementTransform(eqns4[11].copy(), eqns5[8]),
             ReplacementTransform(eqns4[12:].copy(), eqns5[9:]),
-            **play_kw
+            run_time=1.5
         )
         self.wait(12)
 
@@ -188,7 +204,7 @@ class main(Scene):
             ReplacementTransform(eqns5[:2].copy(), eqns6[:2]),
             ReplacementTransform(eqns5[7].copy(), eqns6[2]),
             ReplacementTransform(eqns5[8].copy(), eqns6[3]),
-            **play_kw
+            run_time=1.5
         )
         self.wait(6)
 
@@ -198,7 +214,7 @@ class main(Scene):
             ReplacementTransform(eqns6[0].copy(), eqns7[0]),
             ReplacementTransform(eqns6[2].copy(), eqns7[1]),
             ReplacementTransform(eqns6[3].copy(), eqns7[2]),
-            **play_kw
+            run_time=1.5
         )
 
         warn_txt = Tex("!!")
@@ -218,9 +234,7 @@ class main(Scene):
             FadeOut(warn_txt)
         )
 
-        """Scene ---------------------------------------------------------------------------  """
-
-        self.next_section()
+    def scene_4(self, pg_title):
         eqns1_s2 = MathTex(r"a \times b =", r"a + a + a + \cdots + a", substrings_to_isolate=["a", "b"])
         eqns1_s2.shift(UP)
         eqns1_s2.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -276,9 +290,7 @@ class main(Scene):
                   FadeOut(pg_title),
                   )
 
-        """Scene ---------------------------------------------------------------------------  """
-
-        self.next_section()
+    def scene_5(self):
         eqns1_s3 = MathTex(r"\frac{d}{dx}x^n = n x^{n-1}", substrings_to_isolate=["x", "n"])
         eqns1_s3.set_color_by_tex_to_color_map({"x": ORANGE,
                                                 "n": BLUE})
@@ -287,9 +299,7 @@ class main(Scene):
         self.wait(2)
         self.play(FadeOut(eqns1_s3))
 
-        """Scene ---------------------------------------------------------------------------  """
-
-        self.next_section()
+    def scene_6(self):
         eqns1_s4 = MathTex(r"\frac{d}{dx}x^2 =", r"\frac{d}{dx}(x +x + x + \cdots + x)", substrings_to_isolate=["x"])
         eqns1_s4.set_color_by_tex_to_color_map({"x": ORANGE})
         eqns1_s4.shift(UP)
@@ -365,8 +375,7 @@ class main(Scene):
             FadeOut(t5)
         )
 
-        """ Scene ---------------------------------------------------------------------------  """
-        self.next_section()
+    def scene_7(self):
         equation = MathTex(r"f(x)=x^2", font_size=30, substrings_to_isolate=["x"])
         equation.move_to(2.5*UP)
         equation.set_color_by_tex_to_color_map({"x": ORANGE})
@@ -569,7 +578,6 @@ class main(Scene):
 
 
         """ Scene ---------------------------------------------------------------------------  """
-        self.next_section()
         pg_title = Text("Two explanations", font_size=25, color=TEAL)
         pg_title.shift(3*UP)
         pg_title.shift(5*LEFT)
@@ -628,8 +636,7 @@ class main(Scene):
             FadeOut(eq3),
         )
 
-        """ Scene Last ----------------------------------------------------------------------- """
-        self.next_section()
+    def scene_thanks(self):
         last_text = Tex("Thanks!")
         self.play(Write(last_text))
         self.wait(2)
