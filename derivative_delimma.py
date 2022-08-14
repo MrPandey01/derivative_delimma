@@ -3,6 +3,7 @@ Command to execute this file:
 ``` manim -pqh derivative_delimma.py main ```
 """
 from manim import *
+from numpy.core.fromnumeric import size
 from numpy.core.multiarray import arange
 import math
 
@@ -17,19 +18,19 @@ class main(Scene):
 
         self.next_section()
         self.scene_2(title=title, pg_title=pg_title)
+        #
+        self.next_section()
+        self.scene_3(pg_title=pg_title, title=title)
+        #
+        self.next_section()
+        pg_title = self.scene_4()
 
         self.next_section()
-        self.scene_3(title=title)
-
-        self.next_section()
-        self.scene_4(pg_title=pg_title)
-
-        self.next_section()
-        self.scene_5()
+        self.scene_5(pg_title=pg_title)
 
         self.next_section()
         self.scene_6()
-
+        #
         self.next_section()
         self.scene_7()
 
@@ -48,7 +49,7 @@ class main(Scene):
         framebox1.set_stroke(width=1)
 
 
-        pg_title = Text("Introduction", font_size=25, color=TEAL)
+        pg_title = Text("The Teaser", font_size=25, color=TEAL)
         pg_title.shift(3*UP)
         pg_title.shift(5*LEFT)
 
@@ -121,7 +122,7 @@ class main(Scene):
         self.play(Transform(title, eqns0), FadeIn(pg_title))
         self.wait(4)
 
-    def scene_3(self, title: Mobject):
+    def scene_3(self, pg_title, title: Mobject):
         eqns1 = MathTex(r"a", r"=", r"b", substrings_to_isolate=["a", "b"])
         eqns1.shift(UP)
         eqns1.set_color_by_tex_to_color_map({"a": YELLOW,
@@ -227,16 +228,23 @@ class main(Scene):
             FadeOut(eqns5),
             FadeOut(eqns6),
             FadeOut(eqns7),
-            FadeOut(warn_txt)
+            FadeOut(warn_txt),
+            FadeOut(pg_title)
         )
 
-    def scene_4(self, pg_title: Mobject):
+    def scene_4(self):
+        pg_title = Text("The Pledge", font_size=25, color=TEAL)
+        pg_title.shift(3*UP)
+        pg_title.shift(5*LEFT)
+        self.play(FadeIn(pg_title))
+
         eqns1_s2 = MathTex(r"a \times b =", r"a + a + a + \cdots + a", substrings_to_isolate=["a", "b"])
         eqns1_s2.shift(UP)
         eqns1_s2.set_color_by_tex_to_color_map({"a": YELLOW,
                                                 "b": RED})
-        Bi1 = Brace(eqns1_s2[4:], UP)
-        ti1 = Bi1.get_tex(r"(", r"b", r"~ \mathrm{times})")
+        Bi1 = Brace(eqns1_s2[4:], 0.2*UP, buff=0.0)
+        ti1 = MathTex(r"(", r"b", r"~ \mathrm{times})", font_size=30)
+        ti1.next_to(Bi1, 0.2*UP)
         ti1[1].set_color(RED)
 
         grp1 = VGroup(eqns1_s2,Bi1,ti1)
@@ -266,8 +274,9 @@ class main(Scene):
         eqns2_s4.next_to(eqns2_s3, DOWN)
         eqns2_s4.set_color_by_tex_to_color_map({"x": ORANGE})
 
-        Bi = Brace(eqns2_s4[3:], DOWN)
-        ti = Bi.get_tex(r"(", r"x", r"~ \mathrm{times})")
+        Bi = Brace(eqns2_s4[3:], 0.2*DOWN, buff=0.0)
+        ti = MathTex(r"(", r"x", r"~ \mathrm{times})", font_size=30)
+        ti.next_to(Bi, 0.2*DOWN)
         ti[1].set_color(ORANGE)
 
         grp = VGroup(Bi,ti)
@@ -283,19 +292,25 @@ class main(Scene):
                   FadeOut(Bi1),
                   FadeOut(ti1),
                   FadeOut(grp),
-                  FadeOut(pg_title),
                   )
+        return pg_title
 
-    def scene_5(self):
+    def scene_5(self, pg_title):
         eqns1_s3 = MathTex(r"\frac{d}{dx}x^n = n x^{n-1}", substrings_to_isolate=["x", "n"])
         eqns1_s3.set_color_by_tex_to_color_map({"x": ORANGE,
                                                 "n": BLUE})
         eqns1_s3.shift(UP)
         self.play(FadeIn(eqns1_s3))
         self.wait(2)
-        self.play(FadeOut(eqns1_s3))
+        self.play(FadeOut(eqns1_s3),
+                  FadeOut(pg_title))
 
     def scene_6(self):
+        pg_title = Text("The Turn", font_size=25, color=TEAL)
+        pg_title.shift(3*UP)
+        pg_title.shift(5*LEFT)
+        self.play(FadeIn(pg_title))
+
         eqns1_s4 = MathTex(r"\frac{d}{dx}x^2 =", r"\frac{d}{dx}(x +x + x + \cdots + x)", substrings_to_isolate=["x"])
         eqns1_s4.set_color_by_tex_to_color_map({"x": ORANGE})
         eqns1_s4.shift(UP)
@@ -305,6 +320,7 @@ class main(Scene):
         ti[1].set_color(ORANGE)
 
         grp = VGroup(eqns1_s4, Bi,ti)
+
 
         self.play(FadeIn(eqns1_s4))
         self.play(FadeIn(Bi,ti))
@@ -368,10 +384,16 @@ class main(Scene):
 
         self.play(
             FadeOut(text_note),
-            FadeOut(t5)
+            FadeOut(t5),
+            FadeOut(pg_title)
         )
 
     def scene_7(self):
+        pg_title = Text("The Prestige", font_size=25, color=TEAL)
+        pg_title.shift(3*UP)
+        pg_title.shift(5*LEFT)
+        self.play(FadeIn(pg_title))
+
         equation = MathTex(r"f(x)=x^2", font_size=30, substrings_to_isolate=["x"])
         equation.move_to(2.5*UP)
         equation.set_color_by_tex_to_color_map({"x": ORANGE})
@@ -447,7 +469,7 @@ class main(Scene):
         func = ax.plot(lambda x: x ** 2, x_range=[0, 4], color=BLUE_C)
 
         plt_grp = Group(ax, labels, func)
-        plt_grp.scale(0.8)
+        plt_grp.scale(0.7)
 
         x = ValueTracker(2.0)
         dx = ValueTracker(1)
@@ -570,67 +592,135 @@ class main(Scene):
             FadeOut(v_line1),
             FadeOut(v_line2),
             FadeOut(extra_lines_grp),
+            FadeOut(pg_title),
         )
 
 
         """ Scene """
-        pg_title = Text("Two explanations", font_size=25, color=TEAL)
+
+        pg_title = Text("An Algebraic Approach", font_size=25, color=TEAL)
         pg_title.shift(3*UP)
-        pg_title.shift(5*LEFT)
+        pg_title.shift(4*LEFT)
+        self.play(FadeIn(pg_title))
+        self.wait(2)
 
-        eq1 = MathTex(r"x^2 =x+x+\cdots+x + (x-\lfloor x \rfloor) \cdot x", substrings_to_isolate=["x"])
+
+        eq0 = MathTex(r"x^{2} = x", r"\times", r"x", substrings_to_isolate=["x"])
+        eq0.set_color_by_tex_to_color_map({"x": ORANGE})
+        eq0.move_to(2.5*UP)
+        self.play(FadeIn(eq0))
+        self.wait(2)
+
+        eq1 = MathTex(r"x", r"f(x)", r"=", r"f(x) +", r"\cdots", r"+f(x) \quad (x~\mathrm{times})", substrings_to_isolate=["x"])
         eq1.set_color_by_tex_to_color_map({"x": ORANGE})
-        eq1.move_to(2*UP)
-        l1_txt = Text("(1)", font_size=15)
-        l1_txt.next_to(eq1, 5*RIGHT)
+        eq1.next_to(eq0, 2*DOWN)
+        self.play(FadeIn(eq1))
+        self.wait(2)
 
-        Bi = Brace(eq1[2:7], DOWN)
-        ti = Bi.get_tex(r"\lfloor", r"x", r"\rfloor \mathrm{~times}")
-        ti[1].set_color(ORANGE)
-        grp = VGroup(eq1, Bi,ti, l1_txt)
-
-        eq2 = MathTex(r"{d \over dx}(xf(x)) =x \cdot {d \over dx} f(x) +", r"1", r"\cdot f(x)", substrings_to_isolate=["x"])
+        eq2 = MathTex(r"\frac{d}{dx}",
+                      r"(x f(x))",
+                      r"=",
+                      r"\frac{d}{dx}",
+                      r"(",
+                      r"f(x) +",
+                      r"\cdots",
+                      r" +f(x)",
+                      r")",
+                      substrings_to_isolate=["x"])
         eq2.set_color_by_tex_to_color_map({"x": ORANGE})
-        eq2.next_to(grp, 2*DOWN)
-        l2_txt = Text("(2)", font_size=15)
-        l2_txt.next_to(eq2, 3*RIGHT)
-        grp2 = VGroup(eq2, l2_txt)
+        eq2.next_to(eq1, 2*DOWN)
 
-        frameBoxa = SurroundingRectangle(eq2[13:17], buff=0.8 * SMALL_BUFF)
-        frameBoxa.set_stroke(BLUE, 3)
-        boxtextea1 = Text("Didn't account for this part", font_size=15)
-        boxtextea2 = Text("in the previous analysis", font_size=15)
-        boxtextea1.next_to(eq2[13:17].get_center(), UP, buff=0.7)
-        boxtextea2.next_to(boxtextea1.get_center(), 0.5*DOWN)
-        grp_txt = VGroup(boxtextea1, boxtextea2)
-        grp_txt.set_color(BLUE, 3)
+        Bi = Brace(eq2[13: 20], 0.2*DOWN, buff=0.0)
+        ti = MathTex(r"(", r"x", r"~ \mathrm{times})", font_size=25)
+        ti[1].set_color(ORANGE)
+        ti.next_to(Bi, 0.2 * DOWN)
+        grp_brace = VGroup(Bi, ti)
 
-        eq3 = MathTex(r"{d \over dx}(x \cdot x) & ={dx \over dx} \cdot x + x \cdot {dx \over dx} \\  &=2x", substrings_to_isolate=["x"])
+        self.play(TransformMatchingShapes(eq1[:5].copy(), eq2[2:9]),
+                  TransformMatchingShapes(eq1[5:].copy(), eq2[11:]),
+                  FadeIn(grp_brace),
+                  run_time=2
+                  )
+        self.wait(2)
+        self.play(FadeIn(eq2[:2], shift=RIGHT),
+                  FadeIn(eq2[9:11], shift=RIGHT),
+                  run_time=2
+                  )
+        self.wait(2)
+
+        eq3 = MathTex(r"\frac{d}{dx}",
+                         r"(x f(x))",
+                         r"=",
+                         r"(",
+                         r"\frac{d}{dx}f(x) +",
+                         r"\cdots",
+                         r"+",
+                         r" \frac{d}{dx}",
+                         r" f(x)",
+                         r")",
+                         substrings_to_isolate=["x"])
         eq3.set_color_by_tex_to_color_map({"x": ORANGE})
         eq3.next_to(eq2, 2*DOWN)
 
-        self.play(FadeIn(pg_title))
-        self.play(FadeIn(grp))
-        self.wait(2)
-        self.play(FadeIn(grp2))
-        self.wait(1)
-
-        self.play(Create(frameBoxa))
-        self.play(Write(grp_txt))
-
-        self.wait(2)
-        self.play(FadeIn(eq3))
-
-        self.wait(2)
+        Bi = Brace(eq3[10:23],0.2* DOWN, buff=0.0)
+        ti = MathTex(r"(", r"x", r"~ \mathrm{times})", font_size=25)
+        ti[1].set_color(ORANGE)
+        ti.next_to(Bi, 0.2 * DOWN)
+        grp_brace = VGroup(Bi, ti)
 
         self.play(
-            FadeOut(pg_title),
-            FadeOut(grp),
-            FadeOut(grp2),
-            FadeOut(frameBoxa),
-            FadeOut(grp_txt),
-            FadeOut(eq3),
+            ReplacementTransform(eq2[:9].copy(), eq3[:9]),
         )
+        self.wait(1)
+        self.play(
+            TransformMatchingShapes(eq2[11:19].copy(), VGroup(eq3[9], eq3[12:17], eq3[20:])),
+                  run_time=2
+        )
+        self.wait(1)
+        self.play(
+            TransformMatchingShapes(eq2[9:11].copy(), VGroup(eq3[10:12], eq3[17:19])),
+                  run_time=2
+        )
+        self.play(FadeIn(grp_brace))
+        self.wait(2)
+
+
+        eq4 = MathTex(r"\frac{d}{dx}",
+                         r"x \cdot f(x)",
+                      r"+",
+                      r"x \frac{d}{dx} f(x)",
+                      r"\neq",
+                         r"(",
+                         r"\frac{d}{dx}f(x) +",
+                         r"\cdots",
+                         r"+",
+                         r" \frac{d}{dx}",
+                         r" f(x)",
+                         r")",
+                         substrings_to_isolate=["x"])
+        eq4.set_color_by_tex_to_color_map({"x": ORANGE})
+        eq4[14].set_color(RED)
+        eq4.next_to(eq3, 2*DOWN)
+
+        Bi = Brace(eq4[16:28],0.2*DOWN, buff=0.0)
+        ti = MathTex(r"(", r"x", r"~ \mathrm{times})", font_size=25)
+        ti[1].set_color(ORANGE)
+        ti.next_to(Bi, 0.2 * DOWN)
+        grp_brace = VGroup(Bi, ti)
+
+
+        self.play(ReplacementTransform(eq3[9:].copy(), eq4[15:]),
+                  run_time=2)
+        self.play(ReplacementTransform(eq3[:8].copy(), eq4[:14]),
+                  run_time=2)
+        self.play(FadeIn(grp_brace))
+
+        self.wait(2)
+        self.play(Write(eq4[14]))
+
+        self.wait(4)
+
+        self.clear()
 
     def scene_thanks(self):
         last_text = Tex("Thanks!")
