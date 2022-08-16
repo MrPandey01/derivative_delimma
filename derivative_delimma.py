@@ -2,7 +2,6 @@
 Command to execute this file:
 ``` manim -pqh derivative_delimma.py main ```
 """
-from click.core import F
 from manim import *
 from numpy.core.multiarray import arange
 import math
@@ -18,10 +17,10 @@ class main(Scene):
 
         self.next_section()
         eqns0 = self.scene_2(title=title, pg_title=pg_title)
-        #
+
         self.next_section()
         self.scene_3(eqns0= eqns0)
-        #
+
         self.next_section()
         self.scene_4()
 
@@ -51,7 +50,6 @@ class main(Scene):
 
         pg_title = Text("The Teaser", font_size=35, color=TEAL)
         pg_title.shift(UP)
-        #  pg_title.shift(5*LEFT)
 
         ax = Axes(
             x_range = [-4, 5, 1],
@@ -100,6 +98,7 @@ class main(Scene):
         )
         self.wait(4)
         self.play(Create(tangent))
+
         # Move the value of alpha around
         for alpha_ in (0.3, 0.2, 0.5, 0.8, 0.4):
             self.play(alpha.animate.set_value(alpha_),
@@ -227,12 +226,6 @@ class main(Scene):
         text_note.next_to(eqns5, DOWN)
         text_note.shift(3.5*RIGHT)
 
-        #  t5 = MathTex("5").set_color(ORANGE)
-        #  t5.next_to(text_note, DOWN)
-
-        #  t4 = MathTex("4").set_color(ORANGE)
-        #  t4.next_to(text_note, DOWN)
-
         t3 = MathTex("3").set_color(ORANGE)
         t3.next_to(text_note, DOWN)
 
@@ -245,17 +238,12 @@ class main(Scene):
         self.play(
             FadeIn(text_note, t3),
         )
-        #  self.play(ReplacementTransform(t5, t4))
-        #  self.play(ReplacementTransform(t4, t3))
+
         self.play(ReplacementTransform(t3, t2))
         self.play(ReplacementTransform(t2, t1))
 
         self.play(
             FadeOut(text_note),
-            #  FadeOut(t5),
-            #  FadeOut(t4),
-            #  FadeOut(t3),
-            #  FadeOut(t2),
             FadeOut(t1),
         )
 
@@ -355,8 +343,6 @@ class main(Scene):
         eqns1_s3.set_color_by_tex_to_color_map({"x": ORANGE,
                                                 "n": BLUE})
         eqns1_s3.shift(UP)
-        #  indc = index_labels(eqns1_s3)
-        #  self.add(indc)
         self.play(FadeIn(eqns1_s3))
         self.wait(10)
         self.play(FadeOut(eqns1_s3)
@@ -413,12 +399,6 @@ class main(Scene):
         text_note.next_to(eqns3_s4, DOWN)
         text_note.shift(3.5*RIGHT)
 
-        #  t5 = MathTex("5").set_color(ORANGE)
-        #  t5.next_to(text_note, DOWN)
-
-        #  t4 = MathTex("4").set_color(ORANGE)
-        #  t4.next_to(text_note, DOWN)
-
         t3 = MathTex("3").set_color(ORANGE)
         t3.next_to(text_note, DOWN)
 
@@ -431,17 +411,12 @@ class main(Scene):
         self.play(
             FadeIn(text_note, t3),
         )
-        #  self.play(ReplacementTransform(t5, t4))
-        #  self.play(ReplacementTransform(t4, t3))
+
         self.play(ReplacementTransform(t3, t2))
         self.play(ReplacementTransform(t2, t1))
 
         self.play(
             FadeOut(text_note),
-            #  FadeOut(t5),
-            #  FadeOut(t4),
-            #  FadeOut(t3),
-            #  FadeOut(t2),
             FadeOut(t1),
         )
 
@@ -508,7 +483,6 @@ class main(Scene):
 
         self.play(Write(eq3))
         self.play(Write(grp_brace3))
-        #  self.wait(3)
 
         eq4 = MathTex(r"3^2 =", r"3 +3 + 3 + \cdots + 3")
         eq4.next_to(eq3, 2.5*DOWN)
@@ -521,7 +495,6 @@ class main(Scene):
 
         self.play(Write(eq4))
         self.play(Write(grp_brace4))
-        #  self.wait(3)
 
         eq5 = MathTex(r"\mathbb{N} = 1,2,3,\dots")
         eq5.next_to(eq4, 2.5*DOWN)
@@ -600,7 +573,6 @@ class main(Scene):
 
         self.play(
             FadeOut(equation),
-            #  FadeOut(grp1),
             FadeOut(grp2),
             FadeOut(equation2),
         )
@@ -665,10 +637,6 @@ class main(Scene):
         v_line1 = always_redraw(lambda: ax.get_vertical_line(dot1.get_center()))
         v_line2 = always_redraw(lambda: ax.get_vertical_line(dot2.get_center()))
 
-        #  self.play(Create(ax),
-        #            Create(labels),
-        #            Create(func),
-        #            )
         self.play(ReplacementTransform(grp1, plt_grp),
                   run_time=2)
         self.wait(1)
@@ -810,9 +778,6 @@ class main(Scene):
                   run_time=2
                   )
         self.wait(42)
-        #  indcs2 = index_labels(eq2)
-        #  self.add(indcs2)
-
 
         eq3 = MathTex(r"\frac{d}{dx}",
                       r"(x f(x))",
@@ -827,7 +792,6 @@ class main(Scene):
                       r"f(x)",
                        substrings_to_isolate=["x"])
         eq3.set_color_by_tex_to_color_map({"x": ORANGE})
-        #  eq4[14].set_color(RED)
         eq3.next_to(eq2, 2*DOWN)
 
         lbl_3 = MathTex(r"(3)", font_size=30, color=YELLOW).next_to(eq3[-1], RIGHT)
